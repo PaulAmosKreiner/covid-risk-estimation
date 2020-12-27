@@ -40,8 +40,8 @@ class TheForm(Form):
     )
     secondary_attack_rate = IntegerField(
         label='estimation of the secondary attack rate for the contact scenario'
-              'in % (sane values: 20-50 % for indoor gatherings with little or '
-              'no cautionary measures)',
+              ' in % (sane values: 20-50 % for indoor gatherings with little or'
+              ' no cautionary measures)',
         default=25,
         validators=[validators.DataRequired(), validators.NumberRange(1, 60)]
     )
