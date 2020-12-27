@@ -4,19 +4,19 @@ from wtforms import Form, StringField, IntegerField, FloatField, validators
 class TheForm(Form):
     contagious_part_of_infection = IntegerField(
         label='how long an infected patient is contagious (in % of the '
-              'infection time). ballpark of sanity: ~14 days infection, ~4 '
-              'days contagious >> ~30%.',
+              'infection time). (ballpark of sanity: ~14 days infection, ~4 '
+              'days contagious >> ~30%.)',
         default=30,
         validators=[validators.DataRequired(), validators.NumberRange(10, 90)]
     )
     test_sensitivity = IntegerField(
-        label='sensitivity of the covid19 rapid test at hand. 0 if none '
+        label='sensitivity of the covid19 rapid test at hand (in %). 0 if none '
               'available or to be considered.',
         default=0,
         validators=[validators.NumberRange(0, 100)]
     )
     two_weeks_incidence_per_100k = IntegerField(
-        label='the 2-weeks-incidence in relevant population/community',
+        label='the 2-weeks-incidence per 100.000 in population/community',
         default=360,
         validators=[validators.DataRequired(), validators.NumberRange(1, 10000)]
     )
@@ -40,8 +40,8 @@ class TheForm(Form):
     )
     secondary_attack_rate = IntegerField(
         label='estimation of the secondary attack rate for the contact scenario'
-              '(sane values are between 20 and 50 for contacts with little or '
-              'no measures)',
+              'in % (sane values: 20-50 % for indoor gatherings with little or '
+              'no cautionary measures)',
         default=25,
         validators=[validators.DataRequired(), validators.NumberRange(1, 60)]
     )
@@ -49,7 +49,7 @@ class TheForm(Form):
         label="factor by which the risk of the contacts in this scenario to be "
               "infected lower than that of the selected base population's "
               "average (1 = typical behaviour, 5 = very little contacts, "
-              "FFP2-use etc)",
+              "KN95-use etc)",
         default=1,
         validators=[validators.DataRequired(), validators.NumberRange(0.05, 50)]
     )
