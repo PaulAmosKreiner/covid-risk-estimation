@@ -32,26 +32,24 @@ def risk_estimator():
         n_infected = form.number_of_potential_spreaders.data * risk_infected
         n_contagious = n_infected * \
                        (form.contagious_part_of_infection.data / 100)
-        # korrekterweise müsstest du hier die probs anders verrechnen
+        # TODO korrekterweise müsstest du hier die probs anders verrechnen
         risk_contagion = n_contagious * (form.secondary_attack_rate.data / 100)
         risk_death = risk_contagion * (form.IFR.data / 100)
 
         false_negative_rate = 1 - (form.test_sensitivity.data / 100)
         reduction_through_test = 1 / false_negative_rate
 
-        out_html += "<p>" + "risk of one of the contacts with given risk " \
-                    "profile being infected: " + _odds(risk_infected) + "</p>"
+        out_html += "<p>" + "risk that one of the contacts with given risk " \
+                    "profile is infected: " + _odds(n_infected) + "</p>"
+        out_html += "<p>risk of one being contagious: " + \
+                    _odds(n_contagious) + "</p>"
 
         data = pd.DataFrame({
             "without testing": [
-                # risk_infected,
-                # risk_contagious,
                 risk_contagion,
                 risk_death
             ]
         }, index=[
-            # "contact is currently infected",
-            # "contact is currently contagious",
             "contagion occurs",
             "covid19-related death occurs"
         ])
@@ -101,7 +99,8 @@ def risk_estimator():
         return out_html + odds_html
 
     if request.method == "POST" and not form.validate():
-        flash("please provide sane values for every field. reload page for defaults.")
+        flash("please provide sane values for every field. reload page for "
+              "defaults.")
 
     return render_template('main.html', form=form)
 
@@ -136,3 +135,5 @@ def _millify(n):
 def _day_col_string(day):
     day_or_days = "day" if day == 1 else "days"
     return str(day) + " " + day_or_days + " after"
+
+app.secret_key = "11da5693c179bef62dcb13c9edab32f5c4f2aa765e523a2b"
