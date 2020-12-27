@@ -13,7 +13,7 @@ def risk_estimator():
     form = TheForm(request.form)
     if request.method == 'POST' and form.validate():
 
-        out_html = ""
+        out_html = open("src/templates/head.html").read()
 
         test_n_day_before_contagious_sensitivity = {
             1: 0.85,
