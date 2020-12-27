@@ -7,6 +7,7 @@ ENV PYTHONUNBUFFERED True
 # Copy local code to the container image.
 COPY . /src
 WORKDIR /src
+COPY . ./
 
 # Install Python Requirements
 RUN pip install -r requirements.txt
