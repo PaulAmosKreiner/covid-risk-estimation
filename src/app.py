@@ -90,6 +90,7 @@ def risk_estimator():
                     "due to 3000km drive in germany, austria, italy, france" \
                     " is about " + _odds((2 / 1e9) * 3000) + "</p>"
         # https://www.allianz-pro-schiene.de/themen/sicherheit/unfallrisiko-im-vergleich/
+        # https://injuryfacts.nsc.org/all-injuries/preventable-death-overview/odds-of-dying/
 
         out_html += "<p>risk of contagion and covid-related death for one " \
                     "person in the given contact scenario – without testing " \
