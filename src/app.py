@@ -54,7 +54,9 @@ def risk_estimator():
             "covid19-related death occurs"
         ])
 
-        if form.test_sensitivity.data != 0:
+        test_part = form.test_sensitivity.data != 0
+
+        if test_part:
 
             data["after negative test"] = [
                 risk_contagion / reduction_through_test,
@@ -92,9 +94,14 @@ def risk_estimator():
         # https://www.allianz-pro-schiene.de/themen/sicherheit/unfallrisiko-im-vergleich/
         # https://injuryfacts.nsc.org/all-injuries/preventable-death-overview/odds-of-dying/
 
-        out_html += "<p>risk of contagion and covid-related death for one " \
-                    "person in the given contact scenario – without testing " \
-                    "and after a negative test with given sensitivity:</p>"
+        if test_part:
+            out_html += "<p>risk of contagion and covid-related death for one" \
+                        " person in the given contact scenario – without " \
+                        "testing and after a negative test with given " \
+                        "sensitivity:</p>"
+        else:
+            out_html += "<p>risk of contagion and covid-related death for one" \
+                        " person in the given contact scenario:</p>"
 
         odds_html = data.applymap(_odds).to_html()
         return out_html + odds_html
