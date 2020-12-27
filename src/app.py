@@ -3,7 +3,7 @@ import math
 import pandas as pd
 from flask import Flask, request, render_template, flash
 
-from form import TheForm
+from src.form import TheForm
 
 app = Flask(__name__)
 
