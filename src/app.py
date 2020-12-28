@@ -14,6 +14,12 @@ def risk_estimator():
     if request.method == 'POST' and form.validate():
 
         out_html = open("src/templates/head.html").read()
+        out_html += "<p>DISCLAIMER: This tool is meant to be used with at " \
+                    "least basic knowledge of covid 19 / SARS-Cov-2. stay " \
+                    "safe and always err on the side of caution. feedback on " \
+                    "<a href=" \
+                    "https://github.com/PaulAmosKreiner/covid-risk-estimation" \
+                    ">github</a></p>"
 
         test_n_day_before_contagious_sensitivity = {
             1: 0.85,
@@ -29,15 +35,24 @@ def risk_estimator():
 
         risk_infected = prevalence_base / \
                         form.risk_of_infection_reduced_relative_to_population.data
+
+        # assuming ~30 % asymptomatic transmissions in total (~20% who have
+        # asymptomatic covid plus the one's that spread pre-symptoms)
+        # https://doi.org/10.3138/jammi-2020-0030 (2020)
+        # assuming around 10% SAR at most when without symptoms
+        # 0.7% found in this metastudy (with very limited data though)
+        # https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2774102
+
         n_infected = form.number_of_potential_spreaders.data * risk_infected
-        n_contagious = n_infected * \
-                       (form.contagious_part_of_infection.data / 100)
+
+        n_contagious = n_infected # * \
+        #               (form.contagious_part_of_infection.data / 100)
         # TODO korrekterweise müsstest du hier die probs anders verrechnen
         risk_contagion = n_contagious * (form.secondary_attack_rate.data / 100)
         risk_death = risk_contagion * (form.IFR.data / 100)
 
         # second-level risk
-        second_level_estimation = form.second_level_days.data is not None
+        second_level_estimation = form.second_level_days.data != 0
         if second_level_estimation:
             incubation_cum = {
                 1: 0.01,
@@ -71,8 +86,8 @@ def risk_estimator():
 
         out_html += "<p>" + "risk that one of the contacts with given risk " \
                     "profile is infected: " + _odds(n_infected) + "</p>"
-        out_html += "<p>risk of one being contagious: " + \
-                    _odds(n_contagious) + "</p>"
+        #out_html += "<p>risk of one being contagious: " + \
+        #            _odds(n_contagious) + "</p>"
 
         data = pd.DataFrame({
             "without testing": [
@@ -84,10 +99,11 @@ def risk_estimator():
             "covid19-related death occurs"
         ])
 
-        data = data.append(pd.DataFrame(
-            {"without testing": [second_level_contagion, second_level_death]},
-            index=["second-level contagion occurs","second-level death occurs"]
-        ))
+        if second_level_estimation:
+            data = data.append(pd.DataFrame(
+                {"without testing": [second_level_contagion, second_level_death]},
+                index=["second-level contagion occurs","second-level death occurs"]
+            ))
 
         test_part = form.test_sensitivity.data != 0
 
@@ -130,7 +146,7 @@ def risk_estimator():
             out_html += "<p>risk of contagion and covid-related death for one" \
                         " person in the given contact scenario – without " \
                         "testing and after a negative test with given " \
-                        "sensitivity:</p>"
+                        "sensitivity and listed freshness:</p>"
         else:
             out_html += "<p>risk of contagion and covid-related death for one" \
                         " person in the given contact scenario:</p>"
@@ -174,6 +190,6 @@ def _millify(n):
 
 def _day_col_string(day):
     day_or_days = "day" if day == 1 else "days"
-    return str(day) + " " + day_or_days + " after"
+    return "test " + str(day) + " " + day_or_days + " old"
 
 app.secret_key = "11da5693c179bef62dcb13c9edab32f5c4f2aa765e523a2b"
