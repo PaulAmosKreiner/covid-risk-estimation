@@ -36,6 +36,36 @@ def risk_estimator():
         risk_contagion = n_contagious * (form.secondary_attack_rate.data / 100)
         risk_death = risk_contagion * (form.IFR.data / 100)
 
+        # second-level risk
+        second_level_estimation = form.second_level_days.data is not None
+        if second_level_estimation:
+            incubation_cum = {
+                1: 0.01,
+                2: 0.03,
+                3: 0.1,
+                4: 0.28,
+                5: 0.53,
+                6: 0.65,
+                7: 0.77,
+                8: 0.84,
+                9: 0.92,
+                10: 0.95,
+                11: 0.96,
+                12: 0.97,
+                13: 0.98,
+                14: 0.99,
+                15: 0.995,
+                16: 0.998,
+                17: 1.0
+            }
+            # https://pubmed.ncbi.nlm.nih.gov/32150748/
+            infected_on_time = risk_contagion * \
+                               incubation_cum[form.second_level_days.data]
+            second_level_contagion = infected_on_time * \
+                                     (form.second_level_sar.data / 100)
+            second_level_death = second_level_contagion * \
+                                 (form.second_level_IFR.data / 100)
+
         false_negative_rate = 1 - (form.test_sensitivity.data / 100)
         reduction_through_test = 1 / false_negative_rate
 
@@ -54,14 +84,16 @@ def risk_estimator():
             "covid19-related death occurs"
         ])
 
+        data = data.append(pd.DataFrame(
+            {"without testing": [second_level_contagion, second_level_death]},
+            index=["second-level contagion occurs","second-level death occurs"]
+        ))
+
         test_part = form.test_sensitivity.data != 0
 
         if test_part:
 
-            data["after negative test"] = [
-                risk_contagion / reduction_through_test,
-                risk_death / reduction_through_test
-            ]
+            data["after negative test"] = data["without testing"] / reduction_through_test
 
             calculate_n_days = 15
             calc_day_range = range(1, calculate_n_days)

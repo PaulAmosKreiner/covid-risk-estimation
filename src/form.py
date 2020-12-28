@@ -53,6 +53,25 @@ class TheForm(Form):
         default=1,
         validators=[validators.DataRequired(), validators.NumberRange(0.05, 50)]
     )
+    second_level_days = IntegerField(
+        label='days the person whose risk is estimated will be around '
+              'another person whose second-level-risk is to be estimated. '
+              'leave empty if not interested in second-level estimation',
+        validators=[validators.NumberRange(1,)]
+    )
+    second_level_IFR = FloatField(
+        label='the expected infection fatality ratio for the second-level '
+              'individual whose risk is estimated (in %)',
+        default=0.7,
+        validators=[validators.NumberRange(0.00001, 35.0)]
+    )
+    second_level_sar = IntegerField(
+        label='estimation of the secondary attack rate for the second-level '
+              'contact scenario in % (sane values: 20-50 % for indoor '
+              'gatherings with little or no cautionary measures)',
+        default=25,
+        validators=[validators.NumberRange(1, 60)]
+    )
 
 
 
