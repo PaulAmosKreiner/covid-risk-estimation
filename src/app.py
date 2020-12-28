@@ -30,7 +30,7 @@ def risk_estimator():
 
         official_prevalence = form.two_weeks_incidence_per_100k.data / 100000
         prevalence_base = official_prevalence * \
-                          form.nonidentified_cases_per_official_case.data
+                          (form.nonidentified_cases_per_official_case.data + 1)
         out_html += "<p>" + "prevalence in population: " + str(round(prevalence_base * 100, 1)) + "%" + "</p>"
 
         risk_infected = prevalence_base / \
