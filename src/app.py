@@ -51,6 +51,31 @@ def risk_estimator():
         risk_contagion = n_contagious * (form.secondary_attack_rate.data / 100)
         risk_death = risk_contagion * (form.IFR.data / 100)
 
+        # sanity check of the SAR
+        # assumptions
+        asymptomatic_share_transmission = 0.2
+        asymptomatic_share_infected = 0.5
+        # calc
+        infected_per_100k = (
+                form.two_weeks_incidence_per_100k.data *
+                (form.nonidentified_cases_per_official_case.data + 1)
+        )
+        daily_transmissions_pop = infected_per_100k / 14
+        asymptomatic_daily = daily_transmissions_pop * \
+                             asymptomatic_share_transmission
+        infected_per_meeting = (form.secondary_attack_rate.data / 100) * \
+                               (form.number_of_potential_spreaders.data + 1)
+        daily_situations_pop = asymptomatic_daily / infected_per_meeting
+        daily_situations_per_asymptomatic = daily_situations_pop / (
+                    asymptomatic_share_infected * infected_per_100k)
+        out_html += "<p>secondary attack rate plausibility check: your " \
+                    "scenario would have to happen " + \
+                    str(math.floor(daily_situations_per_asymptomatic*7)) + \
+                    " to " + \
+                    str(math.ceil(daily_situations_per_asymptomatic*7)) + \
+                    " times per " \
+                    "currently asymptomatic infected individual per week.</p>"
+
         # second-level risk
         second_level_estimation = form.second_level_days.data != 0
         if second_level_estimation:
@@ -191,5 +216,6 @@ def _millify(n):
 def _day_col_string(day):
     day_or_days = "day" if day == 1 else "days"
     return "test " + str(day) + " " + day_or_days + " old"
+
 
 app.secret_key = "11da5693c179bef62dcb13c9edab32f5c4f2aa765e523a2b"
