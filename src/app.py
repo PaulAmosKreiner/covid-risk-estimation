@@ -31,7 +31,7 @@ def risk_estimator():
         official_prevalence = form.two_weeks_incidence_per_100k.data / 100000
         prevalence_base = official_prevalence * \
                           (form.nonidentified_cases_per_official_case.data + 1)
-        out_html += "<p>" + "prevalence in population: " + str(round(prevalence_base * 100, 1)) + "%" + "</p>"
+        out_html += "<p>" + "prevalence in population: " + _odds(prevalence_base) + "</p>"
 
         risk_infected = prevalence_base / \
                         form.risk_of_infection_reduced_relative_to_population.data
@@ -44,12 +44,16 @@ def risk_estimator():
         # https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2774102
 
         n_infected = form.number_of_potential_spreaders.data * risk_infected
-
-        n_contagious = n_infected # * \
+        n_contagious = n_infected  # * \
         #               (form.contagious_part_of_infection.data / 100)
-        # TODO korrekterweise müsstest du hier die probs anders verrechnen
         risk_contagion = n_contagious * (form.secondary_attack_rate.data / 100)
         risk_death = risk_contagion * (form.IFR.data / 100)
+
+        if form.risk_of_infection_reduced_relative_to_population.data != 1:
+            out_html += "<p>" + "prevalence of infection in contacts: " + \
+                        _odds(n_infected) + "</p>"
+            #out_html += "<p>risk of one being contagious: " + \
+            #            _odds(n_contagious) + "</p>"
 
         # second-level risk
         second_level_estimation = form.second_level_days.data != 0
@@ -83,11 +87,6 @@ def risk_estimator():
 
         false_negative_rate = 1 - (form.test_sensitivity.data / 100)
         reduction_through_test = 1 / false_negative_rate
-
-        out_html += "<p>" + "risk that one of the contacts with given risk " \
-                    "profile is infected: " + _odds(n_infected) + "</p>"
-        #out_html += "<p>risk of one being contagious: " + \
-        #            _odds(n_contagious) + "</p>"
 
         # sanity check of the SAR
         # assumptions
