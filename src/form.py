@@ -59,8 +59,9 @@ class TheForm(Form):
     second_level_days = IntegerField(
         label='days the person whose risk is estimated will be around '
               'another person whose second-level-risk is to be estimated. '
-              'leave 0 if not interested in second-level estimation',
+              'leave 0 if not interested in second-level estimation. 17 is max',
         default=0,
+        validators=[validators.NumberRange(0, 17)]
     )
     second_level_IFR = FloatField(
         label='the expected infection fatality ratio for the second-level '
