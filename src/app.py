@@ -8,7 +8,7 @@ from src.form import TheForm
 app = Flask(__name__)
 
 
-@app.route('/', methods=["POST", "GET"])
+@app.route('/covid', methods=["POST", "GET"])
 def risk_estimator():
     form = TheForm(request.form)
     if request.method == 'POST' and form.validate():
