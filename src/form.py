@@ -37,8 +37,8 @@ class TheForm(Form):
     IFR = FloatField(
         label='the expected infection fatality ratio for the individual '
               'whose risk is estimated (in %) – preconfigured value is for '
-              'young, healthy individuals',
-        # https://www.medrxiv.org/content/10.1101/2020.07.23.20160895v7.full-text
+              'young, healthy individuals. (based on: https://www.medrxiv.org/'
+              'content/10.1101/2020.07.23.20160895v7.full-text)',
         default=0.05,
         validators=[validators.DataRequired(),
                     validators.NumberRange(0.00001, 45.0)]
@@ -65,8 +65,9 @@ class TheForm(Form):
     second_level_IFR = FloatField(
         label='the expected infection fatality ratio for the second-level '
               'individual whose risk is estimated (in %) – preconfigured value'
-              ' is for medium-risk individuals (typical 60-year-olds)',
-        # https://www.medrxiv.org/content/10.1101/2020.07.23.20160895v7.full-text
+              ' is for medium-risk individuals (typical 60-year-olds). (based '
+              'on: https://www.medrxiv.org/content/10.1101/'
+              '2020.07.23.20160895v7.full-text)',
         default=.75,
         validators=[validators.NumberRange(0.00001, 35.0)]
     )

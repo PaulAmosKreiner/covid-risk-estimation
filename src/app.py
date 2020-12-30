@@ -183,10 +183,12 @@ def risk_estimator():
                 columns=[_day_col_string(day) for day in removing_days])
 
         out_html += "<p>" + "as a general life risk comparison: death risk " \
-                    "due to 3000km drive in germany, austria, italy, france" \
-                    " is about " + _odds((2 / 1e9) * 3000) + "</p>"
-        # https://www.allianz-pro-schiene.de/themen/sicherheit/unfallrisiko-im-vergleich/
-        # https://injuryfacts.nsc.org/all-injuries/preventable-death-overview/odds-of-dying/
+                            "due to 3000km drive in germany, austria, italy, france" \
+                            " is about " + _odds(
+            (2 / 1e9) * 3000) + ". (based on: " \
+                                "<a href=https://www.allianz-pro-schiene.de/themen/sicherheit/unfallrisiko-im-vergleich/>accident risk per road type (german)</a> and " \
+                                "<a href=https://injuryfacts.nsc.org/all-injuries/preventable-death-overview/odds-of-dying/>odds of dying</a>" \
+                                ")</p>"
 
         if test_part:
             out_html += "<p>risk of contagion and covid-related death for one" \
