@@ -3,32 +3,43 @@ from wtforms.fields.html5 import IntegerField, DecimalField as FloatField
 
 
 class TheForm(Form):
+    two_weeks_incidence_per_100k = IntegerField(
+        label='MUST PROVIDE: the 2-weeks-incidence per 100.000 in population/'
+              'community',
+        # default=360,
+        validators=[validators.DataRequired(), validators.NumberRange(1, 2500)],
+    )
+    number_of_potential_spreaders = IntegerField(
+        label='MUST PROVIDE: how many (non-immune) contacts would be met',
+        # default=1,
+        validators=[validators.DataRequired(), validators.NumberRange(1, 500)]
+    )
     test_sensitivity = FloatField(
-        label='sensitivity of the covid19 rapid test at hand (in %). 0 if none '
-              'available or to be considered.',
+        label='OPTIONAL: sensitivity of the covid19 rapid test at hand (in %). '
+              '0 if none available or to be considered.',
         default=0,
         validators=[validators.NumberRange(0, 99.9)]
     )
-    two_weeks_incidence_per_100k = IntegerField(
-        label='the 2-weeks-incidence per 100.000 in population/community',
-        default=360,
-        validators=[validators.DataRequired(), validators.NumberRange(1, 2500)],
+    second_level_days = IntegerField(
+        label='OPTIONAL: days the person whose risk is estimated will be around'
+              ' another person whose second-level-risk is to be estimated. '
+              'leave 0 if not interested in second-level estimation. 17 is max',
+        default=0,
+        validators=[validators.NumberRange(0, 17)]
     )
+    # AB HIER DIE SACHEN DIE MAN DEFAULT LASSEN KANN
     nonidentified_cases_per_official_case = FloatField(
         label='how many additional cases are estimated to exist per official '
               'case ("Dunkelziffer")',
         default=3,
         validators=[validators.DataRequired(), validators.NumberRange(0, 50)]
     )
-    number_of_potential_spreaders = IntegerField(
-        label='how many (non-immune) contacts would be met',
-        default=1,
-        validators=[validators.DataRequired(), validators.NumberRange(1, 500)]
-    )
     IFR = FloatField(
         label='the expected infection fatality ratio for the individual '
-              'whose risk is estimated (in %)',
-        default=0.7,
+              'whose risk is estimated (in %) – preconfigured value is for '
+              'young, healthy individuals',
+        # https://www.medrxiv.org/content/10.1101/2020.07.23.20160895v7.full-text
+        default=0.05,
         validators=[validators.DataRequired(),
                     validators.NumberRange(0.00001, 45.0)]
     )
@@ -51,17 +62,12 @@ class TheForm(Form):
         default=1,
         validators=[validators.DataRequired(), validators.NumberRange(0.05, 50)]
     )
-    second_level_days = IntegerField(
-        label='days the person whose risk is estimated will be around '
-              'another person whose second-level-risk is to be estimated. '
-              'leave 0 if not interested in second-level estimation. 17 is max',
-        default=0,
-        validators=[validators.NumberRange(0, 17)]
-    )
     second_level_IFR = FloatField(
         label='the expected infection fatality ratio for the second-level '
-              'individual whose risk is estimated (in %)',
-        default=0.7,
+              'individual whose risk is estimated (in %) – preconfigured value'
+              ' is for medium-risk individuals (typical 60-year-olds)',
+        # https://www.medrxiv.org/content/10.1101/2020.07.23.20160895v7.full-text
+        default=.75,
         validators=[validators.NumberRange(0.00001, 35.0)]
     )
     second_level_sar = FloatField(
