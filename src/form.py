@@ -3,13 +3,6 @@ from wtforms.fields.html5 import IntegerField, DecimalField as FloatField
 
 
 class TheForm(Form):
-    #contagious_part_of_infection = IntegerField(
-    #    label='how long an infected patient is contagious (in % of the '
-    #          'infection time). (ballpark of sanity: ~14 days infection, ~4 '
-    #          'days contagious >> ~30%.)',
-    #    default=30,
-    #    validators=[validators.DataRequired(), validators.NumberRange(10, 90)]
-    #)
     test_sensitivity = FloatField(
         label='sensitivity of the covid19 rapid test at hand (in %). 0 if none '
               'available or to be considered.',
