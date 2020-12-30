@@ -57,7 +57,7 @@ def risk_estimator():
 
         if form.risk_of_infection_reduced_relative_to_population.data != 1:
             out_html += "<p>" + "prevalence of infection in contacts: " + \
-                        _odds(n_infected) + "</p>"
+                        _odds(risk_infected) + "</p>"
             #out_html += "<p>risk of one being contagious: " + \
             #            _odds(n_contagious) + "</p>"
 
