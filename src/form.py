@@ -1,5 +1,6 @@
 from wtforms import Form, validators
 from wtforms.fields.html5 import IntegerField, DecimalField as FloatField
+from wtforms.widgets import Input
 
 
 class TheForm(Form):
@@ -12,7 +13,8 @@ class TheForm(Form):
     two_weeks_incidence_per_100k = IntegerField(
         label='the 2-weeks-incidence per 100.000 in population/community',
         default=360,
-        validators=[validators.DataRequired(), validators.NumberRange(1, 2500)]
+        validators=[validators.DataRequired(), validators.NumberRange(1, 2500)],
+        widget=Input(input_type='pattern="\d*"')
     )
     nonidentified_cases_per_official_case = FloatField(
         label='how many additional cases are estimated to exist per official '
@@ -69,6 +71,3 @@ class TheForm(Form):
         default=17.0,
         validators=[validators.NumberRange(1, 50)]
     )
-
-
-
