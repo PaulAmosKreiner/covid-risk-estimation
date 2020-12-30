@@ -188,7 +188,15 @@ def risk_estimator():
                         " person in the given contact scenario:</p>"
 
         odds_html = data.applymap(_odds).to_html()
-        return out_html + odds_html
+        out_html += odds_html
+        out_html += "<br><p>a more precise calculator for only the aerosol " \
+                    "transmission risk – taking into account room " \
+                    "characteristics etc. – can be found here. it assumes a " \
+                    "highly contagious individual and yields the probability " \
+                    "of aerosol-based transmission from him to another person" \
+                    ". <a href='https://www.mpic.de/4747361/risk-calculator'>" \
+                    "GERMAN: max-planck aerosol risk calculator</a></p>"
+        return out_html
 
     if request.method == "POST" and not form.validate():
         flash("please provide sane values for every field. reload page for "
