@@ -15,25 +15,32 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
     {% with messages = get_flashed_messages() %}
-      {% if messages %}
-        <ul class=flashes>
+    {% if messages %}
+    <ul class=flashes>
         {% for message in messages %}
-          <li>{{ message }}</li>
+        <li>{{ message }}</li>
         {% endfor %}
-        </ul>
-      {% endif %}
+    </ul>
+    {% endif %}
     {% endwith %}
     {% block body %}{% endblock %}
 
+    <p>
+        DISCLAIMER: This tool is meant to be used with at least basic knowledge
+        of covid 19 / SARS-Cov-2. stay safe and always err on the side of
+        caution. feedback on <a href="https://github.com/PaulAmosKreiner/
+        covid-risk-estimation">github</a>
+    </p>
+
     {% from "_formhelpers.html" import render_field %}
     <form method=post>
-      <dl>
-          {% for field in form %}
+        <dl>
+            {% for field in form %}
             {{ field.label() }}
             {{ field() }}
             <br><br>
-          {% endfor %}
-      </dl>
+            {% endfor %}
+        </dl>
       <p><input type=submit value="estimate risk">
     </form>
 
