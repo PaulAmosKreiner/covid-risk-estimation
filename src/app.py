@@ -53,6 +53,7 @@ def risk_estimator():
         #               (form.contagious_part_of_infection.data / 100)
         risk_contagion = n_contagious * (form.secondary_attack_rate.data / 100)
         risk_death = risk_contagion * (form.IFR.data / 100)
+        risk_severe = risk_death * 10
 
         if form.risk_of_infection_reduced_relative_to_population.data != 1:
             out_html += "<p>" + "prevalence of infection in contacts: " + \
@@ -128,11 +129,13 @@ def risk_estimator():
         data = pd.DataFrame({
             "without testing": [
                 risk_contagion,
+                risk_severe,
                 risk_death
             ]
         }, index=[
             "contagion occurs",
-            "covid19-related death occurs"
+            "severe course",
+            "death occurs"
         ])
 
         if second_level_estimation:
