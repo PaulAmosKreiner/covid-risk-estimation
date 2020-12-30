@@ -12,6 +12,7 @@ app = Flask(__name__)
 @app.route('/covid', methods=["POST", "GET"])
 def risk_estimator():
     form = TheForm(request.form)
+
     if request.method == 'POST' and form.validate():
 
         out_html = open("src/templates/head.html").read()
