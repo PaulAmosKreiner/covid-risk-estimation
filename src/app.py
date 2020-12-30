@@ -53,12 +53,13 @@ def risk_estimator():
         #               (form.contagious_part_of_infection.data / 100)
         risk_contagion = n_contagious * (form.secondary_attack_rate.data / 100)
         risk_death = risk_contagion * (form.IFR.data / 100)
-        risk_severe = risk_death * 10  # very rough
+        severity_factor = 10
+        risk_severe = risk_death * severity_factor  # very rough
 
         if form.risk_of_infection_reduced_relative_to_population.data != 1:
             out_html += "<p>" + "prevalence of infection in contacts: " + \
                         _odds(risk_infected) + "</p>"
-            #out_html += "<p>risk of one being contagious: " + \
+            # out_html += "<p>risk of one being contagious: " + \
             #            _odds(n_contagious) + "</p>"
 
         # second-level risk
@@ -93,6 +94,8 @@ def risk_estimator():
                                      (form.second_level_sar.data / 100)
             second_level_death = second_level_contagion * \
                                  (form.second_level_IFR.data / 100)
+            second_level_severe = second_level_death * severity_factor
+            # very rough
 
         false_negative_rate = 1 - (form.test_sensitivity.data / 100)
         reduction_through_test = 1 / false_negative_rate
@@ -133,15 +136,19 @@ def risk_estimator():
                 risk_death
             ]
         }, index=[
-            "contagion occurs",
+            "contagion",
             "severe course",
-            "death occurs"
+            "death"
         ])
 
         if second_level_estimation:
             data = data.append(pd.DataFrame(
-                {"without testing": [second_level_contagion, second_level_death]},
-                index=["second-level contagion occurs","second-level death occurs"]
+                {"without testing": [second_level_contagion,
+                                     second_level_severe,
+                                     second_level_death]},
+                index=["second-level contagion",
+                       "second-level severe",
+                       "second-level death"]
             ))
 
         test_part = form.test_sensitivity.data != 0
