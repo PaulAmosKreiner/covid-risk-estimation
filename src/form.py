@@ -1,4 +1,5 @@
-from wtforms import Form, StringField, IntegerField, FloatField, validators
+from wtforms import Form, StringField, validators
+from wtforms.fields.html5 import IntegerField, DecimalField as FloatField
 
 
 class TheForm(Form):
@@ -9,7 +10,7 @@ class TheForm(Form):
     #    default=30,
     #    validators=[validators.DataRequired(), validators.NumberRange(10, 90)]
     #)
-    test_sensitivity = IntegerField(
+    test_sensitivity = FloatField(
         label='sensitivity of the covid19 rapid test at hand (in %). 0 if none '
               'available or to be considered.',
         default=0,
@@ -69,10 +70,10 @@ class TheForm(Form):
         default=0.7,
         validators=[validators.NumberRange(0.00001, 35.0)]
     )
-    second_level_sar = IntegerField(
+    second_level_sar = FloatField(
         label='estimation of the secondary attack rate for the second-level '
               'contact scenario in % (sane values around: 16.5 %)',
-        default=17,
+        default=17.0,
         validators=[validators.NumberRange(1, 60)]
     )
 

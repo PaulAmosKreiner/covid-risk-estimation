@@ -1,3 +1,4 @@
+import decimal
 import math
 
 import pandas as pd
@@ -27,8 +28,11 @@ def risk_estimator():
             3: 0.3,
             4: 0.1
         }
+        test_n_day_before_contagious_sensitivity = \
+            {k: decimal.Decimal(v) for k, v
+             in test_n_day_before_contagious_sensitivity.items()}
 
-        official_prevalence = form.two_weeks_incidence_per_100k.data / 100000
+        official_prevalence = decimal.Decimal(form.two_weeks_incidence_per_100k.data / 100000)
         prevalence_base = official_prevalence * \
                           (form.nonidentified_cases_per_official_case.data + 1)
         out_html += "<p>" + "prevalence in population: " + _odds(prevalence_base) + "</p>"
@@ -77,6 +81,9 @@ def risk_estimator():
                 16: 0.998,
                 17: 1.0
             }
+            incubation_cum = {k: decimal.Decimal(v) for k, v
+                              in incubation_cum.items()}
+
             # https://pubmed.ncbi.nlm.nih.gov/32150748/
             infected_on_time = risk_contagion * \
                                incubation_cum[form.second_level_days.data]
@@ -90,8 +97,8 @@ def risk_estimator():
 
         # sanity check of the SAR
         # assumptions
-        asymptomatic_share_transmission = 0.2
-        asymptomatic_share_infected = 0.5
+        asymptomatic_share_transmission = decimal.Decimal(0.2)
+        asymptomatic_share_infected = decimal.Decimal(0.5)
         # calc
         infected_per_100k = (
                 form.two_weeks_incidence_per_100k.data *
@@ -146,7 +153,7 @@ def risk_estimator():
                     non_contagious_test_sensitivity = \
                         test_n_day_before_contagious_sensitivity[day]
                 except:  # noqa
-                    non_contagious_test_sensitivity = 0.0
+                    non_contagious_test_sensitivity = decimal.Decimal(0.0)
                 if day == 1:
                     data[_day_col_string(day)] = \
                         data["after negative test"] + \
