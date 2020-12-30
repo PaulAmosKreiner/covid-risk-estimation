@@ -74,7 +74,7 @@ class TheForm(Form):
         label='estimation of the secondary attack rate for the second-level '
               'contact scenario in % (sane values around: 16.5 %)',
         default=17.0,
-        validators=[validators.NumberRange(1, 60)]
+        validators=[validators.NumberRange(1, 50)]
     )
 
 
