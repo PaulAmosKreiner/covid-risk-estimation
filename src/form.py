@@ -1,4 +1,4 @@
-from wtforms import Form, StringField, validators
+from wtforms import Form, validators
 from wtforms.fields.html5 import IntegerField, DecimalField as FloatField
 
 
