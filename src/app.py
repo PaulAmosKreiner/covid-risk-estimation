@@ -117,17 +117,6 @@ def risk_estimator():
         daily_situations_pop = asymptomatic_daily / infected_per_meeting
         daily_situations_per_asymptomatic = daily_situations_pop / (
                 asymptomatic_share_infected * infected_per_100k)
-        out_html += "<p>secondary attack rate plausibility check: your " \
-                    "scenario would have to happen " + \
-                    str(math.floor(daily_situations_per_asymptomatic * 7)) + \
-                    " to " + \
-                    str(math.ceil(daily_situations_per_asymptomatic * 7)) + \
-                    " times per currently asymptomatic infected individual " \
-                    "per week if made to explain " + \
-                    str(round(asymptomatic_share_transmission * 100)) + "% of" \
-                    " the weekly covid transmissions in this population " \
-                    "(which is in the right ballpark for asymptomatic " \
-                    "transmissions as a share of total transmissions).</p>"
 
         data = pd.DataFrame({
             "without testing": [
@@ -208,6 +197,19 @@ def risk_estimator():
                     "highly contagious individual and yields the probability " \
                     "of aerosol-based transmission from him to another person" \
                     ".</p>"
+
+        out_html += "<p>secondary attack rate plausibility check: your " \
+                    "scenario would have to happen " + \
+                    str(math.floor(daily_situations_per_asymptomatic * 7)) + \
+                    " to " + \
+                    str(math.ceil(daily_situations_per_asymptomatic * 7)) + \
+                    " times per currently asymptomatic infected individual " \
+                    "per week if made to explain " + \
+                    str(round(asymptomatic_share_transmission * 100)) + "% of" \
+                                                                        " the weekly covid transmissions in this population " \
+                                                                        "(which is in the right ballpark for asymptomatic " \
+                                                                        "transmissions as a share of total transmissions).</p>"
+
         return out_html
 
     if request.method == "POST" and not form.validate():
