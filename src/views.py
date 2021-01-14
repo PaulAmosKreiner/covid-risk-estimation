@@ -2,20 +2,20 @@ import decimal
 import math
 
 import pandas as pd
-from flask import Flask, request, render_template, flash
+from flask import Blueprint, request, render_template, flash
 
-from src.form import TheForm
+from .form import TheForm
 
-app = Flask(__name__)
+covidriskestimation = Blueprint('covidriskestimation', __name__, template_folder='templates')
 
-
-@app.route('/covid', methods=["POST", "GET"])
+@covidriskestimation.route('/', methods=["POST", "GET"])
 def risk_estimator():
     form = TheForm(request.form)
 
     if request.method == 'POST' and form.validate():
 
-        out_html = open("src/templates/head.html").read()
+        # TODO not pretty since relies on wd. maybe render_template works
+        out_html = open("covidriskestimation/src/templates/head.html").read()
         out_html += "<p>DISCLAIMER: This tool is meant to be used with at " \
                     "least basic knowledge of covid 19 / SARS-Cov-2. stay " \
                     "safe and always err on the side of caution. feedback on " \
@@ -216,7 +216,7 @@ def risk_estimator():
         flash("please provide sane values for every field. reload page for "
               "defaults.")
 
-    return render_template('main.html', form=form)
+    return render_template('covidriskestimation/main.html', form=form)
 
 
 def _round_human(number):
@@ -251,4 +251,4 @@ def _day_col_string(day):
     return "test " + str(day) + " " + day_or_days + " old"
 
 
-app.secret_key = "11da5693c179bef62dcb13c9edab32f5c4f2aa765e523a2b"
+# app.secret_key = "11da5693c179bef62dcb13c9edab32f5c4f2aa765e523a2b"
