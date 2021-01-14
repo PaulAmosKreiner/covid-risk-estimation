@@ -15,7 +15,7 @@ def risk_estimator():
     if request.method == 'POST' and form.validate():
 
         # TODO not pretty since relies on wd. maybe render_template works
-        out_html = open("covidriskestimation/src/templates/head.html").read()
+        out_html = open("covidriskestimation/src/templates/covidriskestimation/head.html").read()
         out_html += "<p>DISCLAIMER: This tool is meant to be used with at " \
                     "least basic knowledge of covid 19 / SARS-Cov-2. stay " \
                     "safe and always err on the side of caution. feedback on " \
