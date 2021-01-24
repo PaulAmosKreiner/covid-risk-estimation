@@ -55,7 +55,7 @@ class TheForm(Form):
     )
     risk_of_infection_reduced_relative_to_population = FloatField(
         label="factor by which the risk of the contacts in this scenario to be "
-              "infected lower than that of the selected base population's "
+              "infected is lower than that of the selected base population's "
               "average (0,5 = high level of risky contacts, "
               "1 = typical behaviour, 5 = very little contacts, "
               "KN95/FFP2-use etc)",
